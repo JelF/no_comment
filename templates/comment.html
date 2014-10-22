@@ -1,2 +1,15 @@
-{# requires comment #}
-It's a simple comment
+{# requires comment, children #}
+
+{% if comment %}
+    <div class="comment" id="comment_{{ comment.id }}">
+
+    {{ comment.text }}
+{% endif %}
+{% for child in children %}
+    <div class="comment" id="comment_{{ child.id }}">
+        {{ child.text }}
+    </div>
+{% endfor %}
+{% if comment %}
+    </div>
+{% endif %}
