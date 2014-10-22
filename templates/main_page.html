@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load bootstrap3 %}
+
+<html lang="ru">
+<head>
+    <title>Тестовое задание</title>
+
+    <script type="text/javascript" src="{% static 'django_extensions/js/jquery-1.7.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax-plugin.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/comment.js' %}"></script>
+    {% bootstrap_javascript %}
+
+    <link href="{% static 'css/comment.css' %}" rel="stylesheet">
+    {% bootstrap_css %}
+</head>
+<body>
+    <h1>Это тестовое задание. Снизу распологаются коментарии</h1>
+    <div class="comments">
+        <a class="btn btn-primary" onclick="add_comment(0);"> Добавить комментарий</a>
+        <div id="comments_root">
+            {# Comments would be inserted here #}
+        </div>
+    </div>
+
+</body>
+</html>

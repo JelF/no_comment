@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf.global_settings import TEMPLATE_DIRS
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -36,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_ajax',
     'django_extensions',
     'bootstrap3',
     'comment',
@@ -54,6 +57,10 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'no_comment.urls'
 
 WSGI_APPLICATION = 'no_comment.wsgi.application'
+
+TEMPLATE_DIRS += (
+    BASE_DIR+'/templates',
+)
 
 
 # Database
@@ -78,7 +85,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
