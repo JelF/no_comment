@@ -3,3 +3,4 @@
 *._*
 *.pyc
 temp/*
+db.sqlite3
