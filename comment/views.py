@@ -12,7 +12,11 @@ def comment_by_id(request, comment_id):
         comment = Comment.objects.get(id=int(comment_id))
     except:
         raise Http404()
-    return render_to_response('comment.html', {'comment': comment})
+    return render_to_response('comment.html', {'comment': comment, 'children': comment.child})
+
+def root_comments(request):
+    comments= Comment.objects.all(parent=None)
+    return render_to_response('comment.html', {'comment': False, 'children': comments})
 
 def main_page(request):
     return render_to_response('main_page.html', {})

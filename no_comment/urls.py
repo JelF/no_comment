@@ -9,5 +9,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.main_page),
+
     url(r'^ajax/comment/get/(?P<comment_id>\d+)$',views.comment_by_id),
+    url(r'^ajax/comment/get/root$',views.root_comments()),
 )
