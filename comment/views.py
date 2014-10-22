@@ -14,8 +14,9 @@ def comment_by_id(request, comment_id):
         raise Http404()
     return render_to_response('comment.html', {'comment': comment, 'children': comment.child})
 
+@ajax
 def root_comments(request):
-    comments= Comment.objects.all(parent=None)
+    comments= Comment.objects.filter(parent=None)
     return render_to_response('comment.html', {'comment': False, 'children': comments})
 
 def main_page(request):
