@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     #CRUD + child
     url(r'^ajax/comment/get/(?P<comment_id>\d+)$', views.get_comment),
     url(r'^ajax/comment/child/(?P<comment_id>\d+)$', views.get_comment_child),
+    url(r'^ajax/comment/child/load/(?P<comment_id>\d+)$', views.load_comment_child),
     url(r'^ajax/comment/create$', views.create_comment),
     url(r'^ajax/comment/update/(?P<comment_id>\d+)$', views.update_comment),
     url(r'^ajax/comment/delete/(?P<comment_id>\d+)$', views.delete_comment),

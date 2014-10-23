@@ -13,7 +13,7 @@ def get_comment(request, comment_id):
         comment = Comment.objects.get(id=int(comment_id))
     except:
         raise Http404()
-    return render_to_response('comment.html', {'comment': comment, 'child_count': comment.child.count})
+    return render_to_response('comment.html', {'comment': comment})
 
 
 @ajax
@@ -26,39 +26,54 @@ def get_comment_child(request, comment_id):
     except:
         raise Http404()
     result = []
-    for child in children.order_by('timestamp'):
+    for child in children.order_by('-timestamp'):
         result += [child.id]
     return result
     #return render_to_response("printArray.html", {'data': result})
 
+
+@ajax
+def load_comment_child(request, comment_id):
+    try:
+        if comment_id == "0":
+            children = Comment.objects.filter(parent=None)
+        else:
+            children = Comment.objects.filter(parent_id=int(comment_id))
+    except:
+        raise Http404()
+    return render_to_response("multiple_comment.html", {'comments': children.order_by('-timestamp')})
+
+
 @ajax
 def create_comment(request):
-    parent_id=request.POST['parent']
+    parent_id = request.POST['parent']
     try:
         if parent_id == "0":
-            parent=None
+            parent = None
         else:
-            parent=Comment.objects.get(id=parent_id)
+            parent = Comment.objects.get(id=parent_id)
         comment = Comment()
-        comment.parent=parent
-        comment.text=request.POST['text']
+        comment.parent = parent
+        comment.text = request.POST['text']
         comment.save()
     except:
         raise Http404
     return comment.id
 
+
 @ajax
-def update_comment(request,comment_id):
+def update_comment(request, comment_id):
     try:
         comment = Comment.objects.get(id=int(comment_id))
-        comment.text=request.POST['text']
+        comment.text = request.POST['text']
         comment.save()
     except:
         raise Http404()
     return "OK"
 
+
 @ajax
-def delete_comment(request,comment_id):
+def delete_comment(request, comment_id):
     try:
         Comment.objects.filter(id=int(comment_id)).delete()
     except:

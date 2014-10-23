@@ -3,6 +3,11 @@ function loadComment(e, id) {
         e.prepend(res);
     }, null);
 }
+function loadComments(e, id) {
+    ajaxGet("ajax/comment/child/load/"+id ,null,function(res) {
+        e.html(res);
+    }, null);
+}
 
 function getChildren(id,callback) {
     var res=[];
@@ -102,11 +107,7 @@ var parent_id;
 var shadowed_comment=false;
 
 window.onload = function () {
-    getChildren(0,function(x) {
-        for (var id in x) {
-            loadComment($("#comments_root"), x[id]);
-        }
-    });
-    edit_form=$("#edit_form")
-    edit_field=$("#edit_field")
+    loadComments($("#comments_root"),0);
+    edit_form=$("#edit_form");
+    edit_field=$("#edit_field");
 };
