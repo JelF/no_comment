@@ -1,8 +1,31 @@
 {# requires comment #}
-Something
+{% load bootstrap3 %}
+
 <div class="comment" id="comment_{{ comment.id }}">
-    <div class="text">
-        {{ comment.text }}
+    <div class="comment_main">
+        <h4>Заголовок</h4>
+        <span class="text">
+            {{ comment.text }}
+        </span>
+        <a onclick="edit({{ comment.id }})" title="Edit...">
+            {% bootstrap_icon 'edit' %}
+        </a>
+    </div>
+    <div class="nav">
+        <a onclick="expand({{ comment.id }})" title="Expand" style="display: none" class="expand_btn">
+            {% bootstrap_icon 'expand' %}
+        </a>
+        <a onclick="collapse({{ comment.id }})" title="Collapse" style="display: none" class="collapse_btn">
+            {% bootstrap_icon 'collapse' %}
+        </a>
+        <span class="child_control" style="display: none">
+            <span class="child_count">{{ child_count }}</span>
+            комментария
+        </span>
     </div>
     <div class="children"></div>
+
+    <script type="text/javascript">
+        init({{ comment.id }});
+    </script>
 </div>

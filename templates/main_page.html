@@ -10,6 +10,7 @@
     <script type="text/javascript" src="{% static 'django_extensions/js/jquery-1.7.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax-plugin.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/csrf_ajax.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/comment.js' %}"></script>
     {% bootstrap_javascript %}
 
@@ -24,6 +25,8 @@
             {# Comments would be inserted here #}
         </div>
     </div>
+
+{% include 'comment_editform.html' %}
 
 </body>
 </html>
