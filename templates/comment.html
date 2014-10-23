@@ -16,9 +16,9 @@
             {% bootstrap_icon 'expand' %}
         </a>
         <a onclick="collapse({{ comment.id }})" title="Collapse" style="display: none" class="collapse_btn">
-            {% bootstrap_icon 'collapse' %}
+            {% bootstrap_icon 'collapse-down' %}
         </a>
-        <span class="child_control" style="display: none">
+        <span class="child_control">
             <span class="child_count">{{ comment.child_count }}</span>
             комментария
         </span>
@@ -26,6 +26,6 @@
     <div class="children"></div>
 
     <script type="text/javascript">
-        init({{ comment.id }});
+        comment_init({{ comment.id }});
     </script>
 </div>

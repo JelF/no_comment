@@ -1,113 +1,88 @@
-function loadComment(e, id) {
-    ajaxGet("ajax/comment/get/"+id ,null,function(res) {
-        e.prepend(res);
-    }, null);
-}
-function loadComments(e, id) {
-    ajaxGet("ajax/comment/child/load/"+id ,null,function(res) {
-        e.html(res);
-    }, null);
+function comment_element(id) {
+    return $("#comment_"+id);
 }
 
-function getChildren(id,callback) {
-    var res=[];
-    $.get("ajax/comment/child/"+id ,null,function(responce) {
-        callback(responce.content);
-    });
+function comment_get_children_count(e) {
+    return $(".child_count",e).text();
 }
 
-function add_comment(id) {
-    edit_id=false;
-    parent_id=id;
-    var place;
-    close_form();
-    if(id==0) place=$("#comments_root");
-    else  {
-        place= $("#comment_"+id+ " .children");
-    }
-    $("#edit_delete_btn").hide();
-    place.prepend(edit_form);
-    edit_form.show();
+function comment_set_children_count(e,count) {
+    $(".child_count",e).text(count);
+}
+function comment_inc_children_count(e) {
+    comment_set_children_count(e,comment_get_children_count(e)*1+1)
 }
 
-function close_form() {
-    edit_field.val("");
-    edit_form.hide();
-    if(shadowed_comment) {
-        shadowed_comment.show();
-        shadowed_comment=false;
-    }
-}
-
-function edit(id) {
-    edit_id=id;
-    close_form();
-    var place=$("#comment_"+id);
-    shadowed_comment = $(".comment_main",place)
-    shadowed_comment.hide();
-    var text = $.trim($(".text",place).text());
-    $("#edit_delete_btn").show();
-    edit_field.val(text);
-    edit_form.show();
-    place.prepend(edit_form);
-}
-
-function validate_text(text) {
-    if($.trim(text).size>10) {
-        alert("Введите текст от 10 символов!");
+function comment_get_parent(e) {
+    var first= e.parent();
+    if(first.hasClass("comments_root")) {
         return false;
+    }
+    return first.parent();
+}
+
+function comment_get_child_rood(e) {
+    return $(".children",e);
+}
+
+function isDeep(e) {
+    for(var deep=3;deep>0;deep--) { //5 is a constant
+        e = comment_get_parent(e);
+        if(e==false) {
+            return false;
+        }
     }
     return true;
 }
-function submit() {
-    if(!validate_text(edit_field.val())) {
-        return;
+
+function comment_get_id(e) {
+    var div_id = e.attr('id');
+    return /comment_(\d+)/.exec(div_id)[1]*1;
+}
+
+function comment_expand(e) {
+    //Comment saves information was his child loaded and is he expanded in values
+    var child_root = comment_get_child_rood(e);
+    if(!e.val()) {
+        loadComments(child_root,comment_get_id(e));
+        e.val(true);
     }
-    if(edit_id) {
-        $.post('ajax/comment/update/'+edit_id,
-            {
-                text: edit_field.val()
-            }).success(function() {
-                $(".text",shadowed_comment).text(edit_field.val());
-                close_form();
-            }).error(function() {
-                alert("Ошибка обновления!")
-            });
-    }
-    else {
-        $.post("ajax/comment/create",
-            {
-                text: edit_field.val(),
-                parent: parent_id
-            }).success(function(x) {
-                var child;
-                if(parent_id==0) child=$("#comments_root");
-                else child=$("#comment_"+parent_id+" .child");
-                loadComment(child, x.content);
-                close_form();
-            }).error(function() {
-                alert("Ошибка добавления!")
-            });
+    child_root.show();
+    $(".expand_btn",e).hide();
+    $(".collapse_btn",e).show();
+    e.val(true);
+
+}
+
+function comment_collapse(e) {
+    comment_get_child_rood(e).hide();
+    $(".expand_btn",e).show();
+    $(".collapse_btn",e).hide();
+}
+
+function comment_insert(e,text) {
+    comment_expand(e);
+    comment_inc_children_count(e);
+    e.prepend(text);
+
+}
+
+function comment_init(id) {
+    var e = comment_element(id);
+    if(comment_get_children_count(e)!=0) {
+        if(!isDeep(e)) {
+            comment_expand(e);
+        } else {
+            comment_collapse(e);
+        }
     }
 }
 
-function delete_comment() {
-    $.post("ajax/comment/delete/"+edit_id).success(function() {
-        $("#comment_"+edit_id).remove();
-        close_form();
-    }).error(function() {
-        alert("Ошибка удаления!")
-    });
+function collapse(id) {
+    comment_collapse(comment_element(id));
 }
 
-var edit_form;
-var edit_field;
-var edit_id;
-var parent_id;
-var shadowed_comment=false;
 
-window.onload = function () {
-    loadComments($("#comments_root"),0);
-    edit_form=$("#edit_form");
-    edit_field=$("#edit_field");
-};
+function expand(id) {
+    comment_expand(comment_element(id));
+}
