@@ -53,10 +53,6 @@ function edit(id) {
 }
 
 function validate_text(text) {
-    if($.trim(text).length<10) {
-        alert("Введите текст от 10 символов!");
-        return false;
-    }
     return true;
 }
 function submit() {
