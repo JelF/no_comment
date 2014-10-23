@@ -1,10 +1,20 @@
-function loadComment(e) {
-    ajaxGet("ajax/comment/get/root",null,function(res) {
-        e.html(res);
-        return true;
+function loadComment(e, id) {
+    ajaxGet("ajax/comment/get/"+id ,null,function(res) {
+        e.prepend(res);
     }, null);
 }
 
-window.onload=function() {
-    loadComment($("#comments_root"));
+function getChildren(id,callback) {
+    var res=[];
+    $.get("ajax/comment/child/"+id ,null,function(responce) {
+        callback(responce.content);
+    });
 }
+
+window.onload = function () {
+    getChildren(0,function(x) {
+        for (var id in x) {
+            loadComment($("#comments_root"), x[id]);
+        }
+    });
+};

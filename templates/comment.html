@@ -1,15 +1,8 @@
-{# requires comment, children #}
+{# requires comment #}
 Something
-{% if comment %}
-    <div class="comment" id="comment_{{ comment.id }}">
-
-    {{ comment.text }}
-{% endif %}
-{% for child in children %}
-    <div class="comment" id="comment_{{ child.id }}">
-        {{ child.text }}
+<div class="comment" id="comment_{{ comment.id }}">
+    <div class="text">
+        {{ comment.text }}
     </div>
-{% endfor %}
-{% if comment %}
-    </div>
-{% endif %}
+    <div class="children"></div>
+</div>

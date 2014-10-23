@@ -1,4 +1,5 @@
-from django.http import Http404
+import json
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, render_to_response
 
 # Create your views here.
@@ -12,12 +13,25 @@ def comment_by_id(request, comment_id):
         comment = Comment.objects.get(id=int(comment_id))
     except:
         raise Http404()
-    return render_to_response('comment.html', {'comment': comment, 'children': comment.child})
+    return render_to_response('comment.html', {'comment': comment})
+
 
 @ajax
-def root_comments(request):
-    comments= Comment.objects.filter(parent=None)
-    return render_to_response('comment.html', {'comment': False, 'children': comments})
+def get_child_by_id(request, comment_id):
+    try:
+        if comment_id == "0":
+            children = Comment.objects.filter(parent=None)
+        else:
+            children = Comment.objects.filter(parent_id=int(comment_id))
+    except:
+        raise Http404()
+    result = []
+    for child in children.order_by('-timestamp'):
+        result += [child.id]
+    return result
+    #return render_to_response("printArray.html", {'data': result})
+
 
 def main_page(request):
     return render_to_response('main_page.html', {})
+

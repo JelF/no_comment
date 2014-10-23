@@ -1,0 +1,8 @@
+<div> [
+{% for x in data %}
+    {{ x }}
+    {% if not forloop.last %}
+        ,
+    {% endif %}
+{% endfor %}
+] </div>
