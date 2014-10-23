@@ -22,6 +22,9 @@
             <span class="child_count">{{ comment.child_count }}</span>
             комментария
         </span>
+        <a onclick="add_comment({{ comment.id }})" title="Add...">
+            {% bootstrap_icon 'plus' %}
+        </a>
     </div>
     <div class="children"></div>
 

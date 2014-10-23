@@ -60,9 +60,9 @@ function comment_collapse(e) {
     $(".collapse_btn",e).hide();
 }
 
-function comment_insert(e,text) {
-    comment_expand(e);
-    comment_inc_children_count(e);
+function insert_comment(e,text) { //This is not a comment_ function, because it's arg is not a comment div
+    comment_expand(e.parent());
+    comment_inc_children_count(e.parent());
     e.prepend(text);
 
 }

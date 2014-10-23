@@ -1,6 +1,6 @@
 function loadComment(e, id) {
     ajaxGet("ajax/comment/get/"+id ,null,function(res) {
-        comment_insert(e,res);
+        insert_comment(e,res);
     }, null);
 }
 function loadComments(e, id) {
@@ -82,7 +82,7 @@ function submit() {
             }).success(function(x) {
                 var child;
                 if(parent_id==0) child=$("#comments_root");
-                else child=$("#comment_"+parent_id+" .child");
+                else child=$("#comment_"+parent_id+" .children");
                 loadComment(child, x.content);
                 close_form();
             }).error(function() {
