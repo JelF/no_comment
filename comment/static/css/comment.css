@@ -1,3 +1,7 @@
 .children {
     margin-left: 40px;
 }
+
+span.glyphicon {
+    font-size: 1.6em;
+}
