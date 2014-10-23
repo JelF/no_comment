@@ -1,28 +1,32 @@
 function comment_element(id) {
-    return $("#comment_"+id);
+    return $("#comment_body_"+id);
 }
 
 function comment_get_children_count(e) {
-    return $(".child_count",e).text();
+    return $(".child_count",e).text()*1;
 }
 
 function comment_set_children_count(e,count) {
     $(".child_count",e).text(count);
 }
 function comment_inc_children_count(e) {
-    comment_set_children_count(e,comment_get_children_count(e)*1+1)
+    comment_set_children_count(e,comment_get_children_count(e)+1)
 }
 
 function comment_get_parent(e) {
-    var first= e.parent();
+    var first= e.parent().parent();
     if(first.hasClass("comments_root")) {
         return false;
     }
-    return first.parent();
+    return comment_element(comment_get_id(first.parent()));
 }
 
-function comment_get_child_rood(e) {
-    return $(".children",e);
+function comment_get_child_root(id) {
+    return $("#child_root_"+id);
+}
+
+function comment_child_root(e) {
+    return comment_get_child_root(comment_get_id(e));
 }
 
 function isDeep(e) {
@@ -37,12 +41,12 @@ function isDeep(e) {
 
 function comment_get_id(e) {
     var div_id = e.attr('id');
-    return /comment_(\d+)/.exec(div_id)[1]*1;
+    return /comment.*_(\d+)/.exec(div_id)[1]*1;
 }
 
 function comment_expand(e) {
     //Comment saves information was his child loaded and is he expanded in values
-    var child_root = comment_get_child_rood(e);
+    var child_root = comment_child_root(e);
     if(!e.val()) {
         loadComments(child_root,comment_get_id(e));
         e.val(true);
@@ -55,15 +59,15 @@ function comment_expand(e) {
 }
 
 function comment_collapse(e) {
-    comment_get_child_rood(e).hide();
+    comment_child_root(e).hide();
     $(".expand_btn",e).show();
     $(".collapse_btn",e).hide();
 }
 
-function insert_comment(e,text) { //This is not a comment_ function, because it's arg is not a comment div
-    comment_expand(e.parent());
-    comment_inc_children_count(e.parent());
-    e.prepend(text);
+function comment_insert(e,text) {
+    comment_expand(e);
+    comment_inc_children_count(e);
+    comment_child_root(e).prepend(text);
 
 }
 
@@ -85,4 +89,8 @@ function collapse(id) {
 
 function expand(id) {
     comment_expand(comment_element(id));
+}
+
+function comment_main(e) {
+    return $(".comment_main",e);
 }

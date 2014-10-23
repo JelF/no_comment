@@ -1,6 +1,7 @@
 function loadComment(e, id) {
     ajaxGet("ajax/comment/get/"+id ,null,function(res) {
-        insert_comment(e,res);
+        if(parent_id==0) $("#comments_root").prepend(res);
+        else comment_insert(e,res);
     }, null);
 }
 function loadComments(e, id) {
@@ -21,12 +22,11 @@ function add_comment(id) {
     parent_id=id;
     var place;
     close_form();
-    if(id==0) place=$("#comments_root");
+    if(id==0) $("#comments_root").prepend(edit_form);
     else  {
-        place= $("#comment_"+id+ " .children");
+        comment_element(id).append(edit_form);
     }
     $("#edit_delete_btn").hide();
-    place.prepend(edit_form);
     edit_form.show();
 }
 
@@ -42,7 +42,7 @@ function close_form() {
 function edit(id) {
     edit_id=id;
     close_form();
-    var place=$("#comment_"+id);
+    var place=comment_element(id)
     shadowed_comment = $(".comment_main",place)
     shadowed_comment.hide();
     var text = $.trim($(".text",place).text());
@@ -53,7 +53,7 @@ function edit(id) {
 }
 
 function validate_text(text) {
-    if($.trim(text).size>10) {
+    if($.trim(text).length<10) {
         alert("Введите текст от 10 символов!");
         return false;
     }
@@ -80,10 +80,13 @@ function submit() {
                 text: edit_field.val(),
                 parent: parent_id
             }).success(function(x) {
-                var child;
-                if(parent_id==0) child=$("#comments_root");
-                else child=$("#comment_"+parent_id+" .children");
-                loadComment(child, x.content);
+                if(parent_id==0) {
+                    loadComment(null, x.content);
+                }
+                else {
+                    var child=comment_element(parent_id);
+                    loadComment(child, x.content);
+                }
                 close_form();
             }).error(function() {
                 alert("Ошибка добавления!")

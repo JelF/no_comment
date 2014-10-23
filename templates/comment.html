@@ -2,31 +2,33 @@
 {% load bootstrap3 %}
 
 <div class="comment" id="comment_{{ comment.id }}">
-    <div class="comment_main">
-        <h4>Заголовок</h4>
-        <span class="text">
-            {{ comment.text }}
-        </span>
-        <a onclick="edit({{ comment.id }})" title="Edit...">
-            {% bootstrap_icon 'edit' %}
-        </a>
+    <div class="comment_body" id="comment_body_{{ comment.id }}">
+        <div class="comment_main">
+            <h4>Заголовок</h4>
+            <span class="text">
+                {{ comment.text }}
+            </span>
+            <a onclick="edit({{ comment.id }})" title="Edit...">
+                {% bootstrap_icon 'edit' %}
+            </a>
+        </div>
+        <div>
+            <a onclick="expand({{ comment.id }})" title="Expand" style="display: none" class="expand_btn">
+                {% bootstrap_icon 'expand' %}
+            </a>
+            <a onclick="collapse({{ comment.id }})" title="Collapse" style="display: none" class="collapse_btn">
+                {% bootstrap_icon 'collapse-down' %}
+            </a>
+            <span class="child_control">
+                <span class="child_count">{{ comment.child_count }}</span>
+                комментария
+            </span>
+            <a onclick="add_comment({{ comment.id }})" title="Add...">
+                {% bootstrap_icon 'plus' %}
+            </a>
+        </div>
     </div>
-    <div>
-        <a onclick="expand({{ comment.id }})" title="Expand" style="display: none" class="expand_btn">
-            {% bootstrap_icon 'expand' %}
-        </a>
-        <a onclick="collapse({{ comment.id }})" title="Collapse" style="display: none" class="collapse_btn">
-            {% bootstrap_icon 'collapse-down' %}
-        </a>
-        <span class="child_control">
-            <span class="child_count">{{ comment.child_count }}</span>
-            комментария
-        </span>
-        <a onclick="add_comment({{ comment.id }})" title="Add...">
-            {% bootstrap_icon 'plus' %}
-        </a>
-    </div>
-    <div class="children"></div>
+    <div class="children" id="child_root_{{ comment.id }}"></div>
 
     <script type="text/javascript">
         comment_init({{ comment.id }});
